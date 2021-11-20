@@ -1,0 +1,21 @@
+{
+    "defaultSeverity": "error",
+    "extends": ["tslint:recommended"],
+    "jsRules": {},
+    "rules": {
+        "ordered-imports": false,
+        "object-literal-sort-keys": false,
+        "trailing-comma": [false],
+        "semicolon": [true, "always", "ignore-bound-class-methods"],
+        "no-namespace": false,
+        "no-console": false,
+        "interface-name": false,
+        "no-shadowed-variable": false,
+        "only-arrow-functions": false,
+        "triple-equals": false,
+        "variable-name": false,
+        "no-unused-expression": false,
+        "new-parens": false
+    },
+    "rulesDirectory": []
+}

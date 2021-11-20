@@ -1,0 +1,38 @@
+version: '3.2'
+
+services:
+  rainbow-energy:
+    build:
+      context: .
+      dockerfile: dev/docker/Dockerfile
+    command: npm run watch
+    ports:
+      - '3001:3001'
+    networks:
+      - rainbow-energy-net
+    volumes:
+      - .:/var/app/rainbow-energy-be
+      - /var/app/rainbow-energy-be/node_modules
+    env_file:
+      - .env # it will overwrite .env file content
+    depends_on:
+      - rainbow-energy_postgres
+
+  rainbow-energy_postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+      POSTGRES_DB: rainbowenergy
+    ports:
+      - '5432:5432'
+    networks:
+      - rainbow-energy-net
+    volumes:
+      - 'rainbow-energy-postgres-vol:/var/lib/postgres'
+
+networks:
+  rainbow-energy-net:
+    driver: bridge
+volumes:
+  rainbow-energy-postgres-vol:
