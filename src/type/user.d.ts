@@ -1,4 +1,3 @@
-
 export interface BasicUserDetailResponse {
   email: string;
   id: string;
@@ -29,7 +28,6 @@ export interface UserProfile {
   keyfobSerialId: string;
 }
 
-
 export interface AccountSetupData {
   profile: UserProfile;
   paymentCard: Array<unknown> | null;
@@ -38,13 +36,15 @@ export interface AccountSetupData {
 export interface RegisterUser {
   id: string;
   email: string;
-  firstName?: string;
-  lastName?: string;
-  dob: string;
-  token: string;
-  phone?: string;
+  firstName: string;
+  lastName: string;
+  mobile: string;
   password: string;
-  image: string;
+  isReferred: boolean;
+  referralCode?: string;
+  accountTypeId: number;
+  accountStatus: boolean;
+  createdBy: string;
 }
 
 export interface UserEmailVerification extends RegisterUser {

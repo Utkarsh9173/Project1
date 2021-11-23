@@ -1,6 +1,7 @@
 import { Application } from 'express';
 import { AuthenticateRequest } from '@middleware/authenticate-request';
 
+import UsersRoute from './Users.route';
 import UserRoute from './user.route';
 
 import BaseRoute from './base.route';
@@ -14,6 +15,7 @@ export class Routes {
   }
   public routes(app: Application): void {
     // resource and routes mapping comes here
+    app.use('/api/users', UsersRoute);
     app.use('/api/auth', BaseRoute);
     app.use('/api/user', UserRoute);
     app.use('/api/moretrees', TreesRoute);

@@ -19,11 +19,11 @@ class BaseRoute {
   }
 
   private assign() {
-    this.router.post(
-      '/register',
-      this.httpRequestValidator.validate('body', register),
-      this.authController.register
-    );
+    // this.router.post(
+    //   '/register',
+    //   this.httpRequestValidator.validate('body', register),
+    //   // this.authController.register
+    // );
 
     this.router.get('/', this.authController.defaultCheck);
   }

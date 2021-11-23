@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
-import i18n from "i18n";
-import { ResponseParser } from "@util/response-parser";
-import constant from "@config/constant";
-import { UserService } from "@service/user.service";
+import { Request, Response } from 'express';
+import i18n from 'i18n';
+import { ResponseParser } from '@util/response-parser';
+import constant from '@config/constant';
+import { UserService } from '@service/user.service';
 
 export class AuthController {
   private responseParser: ResponseParser;
@@ -17,7 +17,7 @@ export class AuthController {
     this.responseParser
       .setHttpCode(constant.HTTP_STATUS_OK)
       .setBody({})
-      .setMessage(i18n.__("SUCCESS"))
+      .setMessage(i18n.__('SUCCESS'))
       .send(res);
   };
 
@@ -44,16 +44,16 @@ export class AuthController {
    * @param  {Response} res
    * @returns void
    */
-  public register = async (req: Request, res: Response): Promise<void> => {
-    const { body }= req;
-    const response = await this.userService.register(body);
-    this.responseParser
-      .setStatus(true)
-      .setHttpCode(constant.HTTP_STATUS_CREATED)
-      .setBody(response)
-      .setMessage(i18n.__("signup_successful"))
-      .send(res);
-  };
+  // public register = async (req: Request, res: Response): Promise<void> => {
+  //   const { body }= req;
+  //   const response = await this.userService.register(body);
+  //   this.responseParser
+  //     .setStatus(true)
+  //     .setHttpCode(constant.HTTP_STATUS_CREATED)
+  //     .setBody(response)
+  //     .setMessage(i18n.__("signup_successful"))
+  //     .send(res);
+  // };
 
   // public verifyUserEmail = async(req: Request, res: Response): Promise<void> => {
   //   const { params: { uniqueKey } } = req;
