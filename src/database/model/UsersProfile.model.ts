@@ -8,42 +8,30 @@ import {
   BeforeUpdate
 } from 'typeorm';
 
-@Entity('Users')
-export class Users {
+@Entity('UsersProfile')
+export class UsersProfile {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
 
-  @Column()
-  public email: string;
-
-  @Column()
-  public firstName: string;
-
   @Column({ nullable: false })
-  public lastName: string;
-
-  @Column({ nullable: false })
-  public password: string;
-
-  @Column({ nullable: true, default: false })
-  public isReferred: boolean;
-
-  @Column({ nullable: true })
-  public referralCode: string;
-
-  @Column({ nullable: false })
-  public mobile: string;
-
-  @Column({ nullable: true })
   public empId: string;
 
   @Column({ nullable: false })
-  public accountTypeId: number;
-
-  @Column({ nullable: false, default: false })
-  public accountStatus: boolean;
+  public department: string;
 
   @Column({ nullable: false })
+  public location: string;
+
+  @Column({ nullable: true })
+  public designation: boolean;
+
+  @Column({ nullable: true })
+  public joiningDate: string;
+
+  @Column({ nullable: true })
+  public displayPicture: string;
+
+  @Column({ nullable: true })
   public createdBy: string;
 
   @Column({ nullable: true })

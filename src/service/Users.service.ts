@@ -1,24 +1,27 @@
 import { getManager } from 'typeorm';
-import createError from 'http-errors';
-import { getCustomRepository } from 'typeorm';
-import {
-  AWS_COGNITO_USER_POOL_ID,
-  AWS_COGNITO_REGION,
-  AWS_SECRET_ACCESS_KEY,
-  AWS_ACCESS_KEY,
-  AWS_COGNITO_CLIENT_ID
-} from '@config/secret';
-import {
-  CognitoUserAttribute,
-  CognitoUserPool
-} from 'amazon-cognito-identity-js';
+// import createError from 'http-errors';
+// import { getCustomRepository } from 'typeorm';
+// import {
+//   AWS_COGNITO_USER_POOL_ID,
+//   AWS_COGNITO_REGION,
+//   AWS_SECRET_ACCESS_KEY,
+//   AWS_ACCESS_KEY,
+//   AWS_COGNITO_CLIENT_ID
+// } from '@config/secret';
+// import {
+//   CognitoUserAttribute,
+//   CognitoUserPool
+// } from 'amazon-cognito-identity-js';
 import { UsersRepo } from '@database/repository/Users.repository';
-import { errorCodes } from '@config/responseCodes';
+import { UsersProfileRepo } from '@database/repository/UsersProfile.repository';
+// import { errorCodes } from '@config/responseCodes';
 
 import { RegisterUser } from '@type/user';
+import { UserProfileRegister } from '@type/UserProfile';
 import { Users } from '@database/model/Users.model';
 import createHttpError from 'http-errors';
 import { Service } from 'typedi';
+import bcrypt = require('bcryptjs');
 
 @Service()
 export class UsersService {
@@ -82,13 +85,89 @@ export class UsersService {
   //     );
   //   });
   // }
-
-  public async registerUser(user: RegisterUser): Promise<Users> {
+  public async _checkIfUserExists(user: RegisterUser): Promise<any> {
+    const userRepository = getManager().getCustomRepository(UsersRepo);
     try {
-      const userRepository = getManager().getCustomRepository(UsersRepo);
-      const savedUser = await userRepository.createUser(user);
-      console.log(savedUser);
+      let returnValue: any = '';
+      let empIdCheck: any;
+      let emailDomainCheck: any;
+      if (user.accountTypeId === 1 || user.accountTypeId === 2) {
+        empIdCheck = await userRepository.findUserByEmpId(user.empId);
+        emailDomainCheck =
+          user.email.split('@')[1] === 'studiographene.com' ? true : false;
+      }
+      const mobileCheck = await userRepository.findUserByMobile(user.mobile);
+      const emailCheck = await userRepository.findUserByEmailId(user.email);
+      if (empIdCheck) {
+        returnValue = {
+          status: false,
+          reason: 'User already registered with this EmployeeID.'
+        };
+      } else if (!emailDomainCheck) {
+        returnValue = {
+          status: false,
+          reason: 'Please use your Organization EmailID.'
+        };
+      } else if (mobileCheck) {
+        returnValue = {
+          status: false,
+          reason: 'User already registered with this Mobile Number.'
+        };
+      } else if (emailCheck) {
+        returnValue = {
+          status: false,
+          reason: 'User already registered with this EmailID.'
+        };
+      } else {
+        returnValue = {
+          status: true,
+          reason: 'User not available in DB.'
+        };
+      }
+      return returnValue;
+    } catch (err) {
+      throw new createHttpError.InternalServerError(err);
+    }
+  }
+
+  public async registerUser(user: RegisterUser): Promise<any> {
+    const userRepository = getManager().getCustomRepository(UsersRepo);
+    try {
+      let savedUser: any = 'Registeration Un-Successfull';
+      user.password = await bcrypt.hashSync(user.password);
+      if (
+        user.referralCode &&
+        user.referralCode !== '' &&
+        !user.referralCode !== null
+      ) {
+        user.isReferred = true;
+      }
+      const checkIfUserExists = await this._checkIfUserExists(user);
+      if (checkIfUserExists.status) {
+        savedUser = await userRepository.createUser(user);
+      } else {
+        savedUser = checkIfUserExists.reason;
+      }
+      // console.log(savedUser);
       return savedUser;
+    } catch (err) {
+      throw new createHttpError.InternalServerError(err);
+    }
+  }
+
+  public async createUserProfile(response: UserProfileRegister): Promise<any> {
+    try {
+      console.log(response);
+      const data = {
+        empId: response.empId,
+        location: response.location,
+        department: response.department
+      };
+      console.log(data);
+      const resp: any = await getManager()
+        .getCustomRepository(UsersProfileRepo)
+        .insertData(data);
+      return resp;
     } catch (err) {
       throw new createHttpError.InternalServerError(err);
     }

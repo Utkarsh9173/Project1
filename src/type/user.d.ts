@@ -40,11 +40,14 @@ export interface RegisterUser {
   lastName: string;
   mobile: string;
   password: string;
-  isReferred: boolean;
+  isReferred?: boolean;
   referralCode?: string;
   accountTypeId: number;
-  accountStatus: boolean;
+  accountStatus?: boolean;
   createdBy: string;
+  empId?: string;
+  location?: string;
+  department?: string;
 }
 
 export interface UserEmailVerification extends RegisterUser {

@@ -17,6 +17,9 @@ export class UsersController {
     let response;
     try {
       response = await this.usersService.registerUser(req.body);
+      if (response.accountTypeId === 1 || response.accountTypeId === 2) {
+        await this.usersService.createUserProfile(response);
+      }
     } catch (err) {
       if (err instanceof createHttpError.BadRequest) {
         throw err;
