@@ -14,17 +14,16 @@ import { getManager } from 'typeorm';
 // } from 'amazon-cognito-identity-js';
 import { UsersRepo } from '@database/repository/Users.repository';
 import { UsersProfileRepo } from '@database/repository/UsersProfile.repository';
-// import { errorCodes } from '@config/responseCodes';
-
 import { RegisterUser } from '@type/user';
 import { UserProfileRegister } from '@type/UserProfile';
-import { Users } from '@database/model/Users.model';
 import createHttpError from 'http-errors';
 import { Service } from 'typedi';
 import bcrypt = require('bcryptjs');
+import { EmailService } from '@service/Email.service';
 
 @Service()
 export class UsersService {
+  constructor(private emailService: EmailService) {}
   /**
    * @param  {string} email user's email
    * @param  {string} password password
@@ -145,6 +144,7 @@ export class UsersService {
       const checkIfUserExists = await this._checkIfUserExists(user);
       if (checkIfUserExists.status) {
         savedUser = await userRepository.createUser(user);
+        await this.emailService.sendRegistrationEmail(savedUser);
       } else {
         savedUser = checkIfUserExists.reason;
       }

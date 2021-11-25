@@ -13,7 +13,7 @@ export class UsersController {
   constructor(private usersService: UsersService) {
     this.responseParser = new ResponseParser();
   }
-  public registerUser = async (req: Request, res: Response) => {
+  public registerUser = async (req: Request, res: Response): Promise<void> => {
     let response;
     try {
       response = await this.usersService.registerUser(req.body);
