@@ -17,6 +17,7 @@ class UsersRoute {
       // this.httpRequestValidator.validate('body', RegisterUser),
       this.usersController.registerUser
     );
+    this.router.get('/verify-account', this.usersController.verifyAccount);
   }
 }
 

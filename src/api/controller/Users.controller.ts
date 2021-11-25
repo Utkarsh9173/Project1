@@ -5,6 +5,8 @@ import i18n from 'i18n';
 import { Service } from 'typedi';
 import createHttpError from 'http-errors';
 import { UsersService } from '@service/Users.service';
+import { UsersRepo } from '@database/repository/Users.repository';
+import { getManager } from 'typeorm';
 
 @Service()
 export class UsersController {
@@ -26,6 +28,35 @@ export class UsersController {
       } else {
         throw new createHttpError.InternalServerError(err);
       }
+    }
+    return this.responseParser
+      .setHttpCode(constant.HTTP_STATUS_OK)
+      .setBody(response)
+      .setMessage(i18n.__('SUCCESS'))
+      .send(res);
+  };
+
+  public verifyAccount = async (req: Request, res: Response): Promise<void> => {
+    const userRepository = getManager().getCustomRepository(UsersRepo);
+    let response;
+    try {
+      console.log(req.query);
+      const params: any = req.query.userAccountId;
+      response = await userRepository.findUserByUserId(params);
+      console.log(typeof response, response);
+      if (response) {
+        if (response.message) {
+          response = response.message;
+        } else {
+          // console.log(response);
+          await userRepository.activateAccount(params);
+          response = 'Account verified successfully. Continue to login';
+        }
+      } else {
+        response = 'User not found. Incorrect userAccountId';
+      }
+    } catch (err) {
+      throw new createHttpError.InternalServerError(err);
     }
     return this.responseParser
       .setHttpCode(constant.HTTP_STATUS_OK)

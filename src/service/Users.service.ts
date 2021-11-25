@@ -144,7 +144,11 @@ export class UsersService {
       const checkIfUserExists = await this._checkIfUserExists(user);
       if (checkIfUserExists.status) {
         savedUser = await userRepository.createUser(user);
-        await this.emailService.sendRegistrationEmail(savedUser);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const emailResp = await this.emailService.sendRegistrationEmail(
+          savedUser
+        );
+        // console.log(emailResp);
       } else {
         savedUser = checkIfUserExists.reason;
       }
@@ -157,13 +161,13 @@ export class UsersService {
 
   public async createUserProfile(response: UserProfileRegister): Promise<any> {
     try {
-      console.log(response);
+      // console.log(response);
       const data = {
         empId: response.empId,
         location: response.location,
         department: response.department
       };
-      console.log(data);
+      // console.log(data);
       const resp: any = await getManager()
         .getCustomRepository(UsersProfileRepo)
         .insertData(data);
