@@ -32,12 +32,17 @@ export class EmailService {
           Body: {
             Html: {
               Charset: 'UTF-8',
-              Data: 'This is the body of my email!'
+              Data: `Hello ${userData.firstName},<br/><br/>
+              Welcome to Studio Graphene.<br/><br/>
+
+              Click on the link to verify your email and activate your account: <br/><br/><br/> <a href="http://localhost:3001/api/user/verify-account?userAccountId=${userData.id}" target="_blank">http://localhost:3001/api/user/verify-account?userAccountId=${userData.id}</a><br/><br/>
+              Thank You<br/>
+              SG Job Portal`
             }
           },
           Subject: {
             Charset: 'UTF-8',
-            Data: `Hello, ${userData.firstName}!`
+            Data: `[Account Activation] Studio Graphene Job Portal`
           }
         }
       };
