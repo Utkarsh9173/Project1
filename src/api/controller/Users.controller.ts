@@ -40,10 +40,10 @@ export class UsersController {
     const userRepository = getManager().getCustomRepository(UsersRepo);
     let response;
     try {
-      console.log(req.query);
+      // console.log(req.query);
       const params: any = req.query.userAccountId;
       response = await userRepository.findUserByUserId(params);
-      console.log(typeof response, response);
+      // console.log(typeof response, response);
       if (response) {
         if (response.message) {
           response = response.message;
@@ -54,6 +54,26 @@ export class UsersController {
         }
       } else {
         response = 'User not found. Incorrect userAccountId';
+      }
+    } catch (err) {
+      throw new createHttpError.InternalServerError(err);
+    }
+    return this.responseParser
+      .setHttpCode(constant.HTTP_STATUS_OK)
+      .setBody(response)
+      .setMessage(i18n.__('SUCCESS'))
+      .send(res);
+  };
+
+  public findEmployee = async (req: Request, res: Response): Promise<void> => {
+    const userRepository = getManager().getCustomRepository(UsersRepo);
+    let response;
+    try {
+      // console.log(req.body.empId);
+      response = await userRepository.findUserByEmpId(req.body.empId);
+      // console.log(typeof response, response);
+      if (!response) {
+        response = 'User not found. Incorrect Employee ID';
       }
     } catch (err) {
       throw new createHttpError.InternalServerError(err);

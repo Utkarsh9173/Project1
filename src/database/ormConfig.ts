@@ -14,16 +14,17 @@ import path from 'path';
 
 let dbName = TYPEORM_DATABASE;
 if (ENVIRONMENT === 'test') {
-  dbName = 'rainbowenergy';
+  dbName = 'sg-jobportal';
 }
 
 const connectionOptions: ConnectionOptions = {
-  type: 'postgres',
+  type: 'mysql',
   entities: [path.resolve(__dirname + '/model/*.{js,ts}')],
   migrations: [__dirname + '/migration/*'],
   synchronize: false,
   logging: true,
   namingStrategy: new SnakeNamingStrategy(),
+  multipleStatements: true,
   replication: {
     master: {
       host: TYPEORM_HOST,

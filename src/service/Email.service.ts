@@ -35,7 +35,7 @@ export class EmailService {
               Data: `Hello ${userData.firstName},<br/><br/>
               Welcome to Studio Graphene.<br/><br/>
 
-              Click on the link to verify your email and activate your account: <br/><br/><br/> <a href="http://localhost:3001/api/user/verify-account?userAccountId=${userData.id}" target="_blank">http://localhost:3001/api/user/verify-account?userAccountId=${userData.id}</a><br/><br/>
+              Click on the link to verify your email and activate your account: <br/><br/><br/> <a href="http://localhost:3001/api/users/verify-account?userAccountId=${userData.id}" target="_blank">http://localhost:3001/api/user/verify-account?userAccountId=${userData.id}</a><br/><br/>
               Thank You<br/>
               SG Job Portal`
             }

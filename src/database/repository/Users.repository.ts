@@ -28,13 +28,16 @@ export class UsersRepo extends Repository<Users> {
   }
 
   public async findUserByEmpId(empId: string): Promise<Users> {
-    const user = await getRepository(Users).findOne({ empId });
+    const user = await getRepository(Users).findOne({
+      empId,
+      accountStatus: true
+    });
     return user;
   }
 
   public async findUserByUserId(id: string): Promise<any> {
     try {
-      const user = await getRepository(Users).findOne({ id: id });
+      const user = await getRepository(Users).findOne({ id });
       return user;
     } catch (err) {
       // throw new createHttpError.InternalServerError(err);
