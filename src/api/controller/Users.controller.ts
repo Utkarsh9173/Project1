@@ -129,7 +129,7 @@ export class UsersController {
     try {
       // console.log(req.query);
       const params: any = req.body;
-      response = await this.usersService.login(params);
+      response = await this.usersService.forgotPassword(params);
       // console.log(response);
     } catch (err) {
       throw new createHttpError.InternalServerError(err);

@@ -187,16 +187,14 @@ export class UsersService {
       if (activeUser === undefined) {
         response = 'Please register or verify your account';
       } else {
-        
-        if (user.password === "") {
-          console.log(user.password);
-          
-          response = 'please enter password';
+        const dbPassword = await bcrypt.compare(
+          user.password,
+          activeUser.password
+        );
+        if (dbPassword) {
+          response = 'you have logged in';
         } else {
-          user.password = await bcrypt.hashSync(user.password);
-          console.log(user.password);
-          
-          response = 'password reset successfully';
+          response = 'Invalid Credentials';
         }
       }
       // console.log(savedUser);
@@ -216,14 +214,14 @@ export class UsersService {
       if (activeUser === undefined) {
         response = 'Please register or verify your account';
       } else {
-        const dbPassword = await bcrypt.compare(
-          user.password,
-          activeUser.password
-        );
-        if (dbPassword) {
-          response = 'you have logged in';
+        
+        if (user.password === "") {
+          response = 'please enter password';
         } else {
-          response = 'Invalid Credentials';
+          user.password = await bcrypt.hashSync(user.password);
+          console.log(user.password);
+          
+          response = 'Password reset sucessfully';
         }
       }
       // console.log(savedUser);
