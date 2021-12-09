@@ -14,7 +14,7 @@ import { getManager } from 'typeorm';
 // } from 'amazon-cognito-identity-js';
 import { UsersRepo } from '@database/repository/Users.repository';
 import { UsersProfileRepo } from '@database/repository/UsersProfile.repository';
-import { RegisterUser } from '@type/user';
+import { RegisterUser, Login } from '@type/user';
 import { UserProfileRegister } from '@type/UserProfile';
 import createHttpError from 'http-errors';
 import { Service } from 'typedi';
@@ -172,6 +172,33 @@ export class UsersService {
         .getCustomRepository(UsersProfileRepo)
         .insertData(data);
       return resp;
+    } catch (err) {
+      throw new createHttpError.InternalServerError(err);
+    }
+  }
+  public async login(user: Login): Promise<any> {
+    const userRepository = getManager().getCustomRepository(UsersRepo);
+    let response;
+    try {
+      const activeUser = await userRepository.findActiveUserByEmailId(
+        user.email
+      );
+      //  console.log(activeUser);
+      if (activeUser === undefined) {
+        response = 'Please register or verify your account';
+      } else {
+        const dbPassword = await bcrypt.compare(
+          user.password,
+          activeUser.password
+        );
+        if (dbPassword) {
+          response = 'you have logged in';
+        } else {
+          response = 'Invalid Credentials';
+        }
+      }
+      // console.log(savedUser);
+      return response;
     } catch (err) {
       throw new createHttpError.InternalServerError(err);
     }

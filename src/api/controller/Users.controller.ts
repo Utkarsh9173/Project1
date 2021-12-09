@@ -84,4 +84,44 @@ export class UsersController {
       .setMessage(i18n.__('SUCCESS'))
       .send(res);
   };
+
+  public findEmployeeEmailId = async (req: Request, res: Response): Promise<void> => {
+    const userRepository = getManager().getCustomRepository(UsersRepo);
+    let response;
+    try {
+      // console.log(req.body.empId);
+      response = await userRepository.findUserByEmailId(req.body.email);
+      // console.log(typeof response, response);
+      if (!response) {
+        response = 'User not found. Incorrect Employee ID';
+      }
+    } catch (err) {
+      throw new createHttpError.InternalServerError(err);
+    }
+    return this.responseParser
+      .setHttpCode(constant.HTTP_STATUS_OK)
+      .setBody(response)
+      .setMessage(i18n.__('SUCCESS'))
+      .send(res);
+  };
+
+  public loginAccount = async (req: Request, res: Response): Promise<void> => {
+    // const userRepository = getManager().getCustomRepository(UsersRepo);
+    let response;
+    try {
+      // console.log(req.query);
+      const params: any = req.body;
+      response = await this.usersService.login(params);
+      // console.log(response);
+    } catch (err) {
+      throw new createHttpError.InternalServerError(err);
+    }
+    return this.responseParser
+      .setHttpCode(constant.HTTP_STATUS_OK)
+      .setBody(response)
+      .setMessage(i18n.__('SUCCESS'))
+      .send(res);
+  };
+
+
 }

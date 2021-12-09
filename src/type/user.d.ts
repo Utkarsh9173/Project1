@@ -53,3 +53,8 @@ export interface RegisterUser {
 export interface UserEmailVerification extends RegisterUser {
   message: string;
 }
+
+export interface Login {
+  email: string;
+  password: string;
+}

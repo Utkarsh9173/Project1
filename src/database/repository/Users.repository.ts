@@ -19,7 +19,16 @@ export class UsersRepo extends Repository<Users> {
     });
     return user;
   }
+  
 
+  public async findActiveUserByEmailId(emailId: string): Promise<Users> {
+    const user = await getRepository(Users).findOne({
+      email: emailId.toLowerCase(),
+      accountStatus: true
+    });
+    return user;
+  }
+  
   public async findUserByMobile(mobile: string): Promise<Users> {
     const user = await getRepository(Users).findOne({
       mobile
