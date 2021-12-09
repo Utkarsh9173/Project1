@@ -187,6 +187,35 @@ export class UsersService {
       if (activeUser === undefined) {
         response = 'Please register or verify your account';
       } else {
+        
+        if (user.password === "") {
+          console.log(user.password);
+          
+          response = 'please enter password';
+        } else {
+          user.password = await bcrypt.hashSync(user.password);
+          console.log(user.password);
+          
+          response = 'password reset successfully';
+        }
+      }
+      // console.log(savedUser);
+      return response;
+    } catch (err) {
+      throw new createHttpError.InternalServerError(err);
+    }
+  }
+  public async forgotPassword(user: Login): Promise<any> {
+    const userRepository = getManager().getCustomRepository(UsersRepo);
+    let response;
+    try {
+      const activeUser = await userRepository.forgotPassword(
+        user.email
+      );
+      //  console.log(activeUser);
+      if (activeUser === undefined) {
+        response = 'Please register or verify your account';
+      } else {
         const dbPassword = await bcrypt.compare(
           user.password,
           activeUser.password
