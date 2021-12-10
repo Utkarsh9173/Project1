@@ -123,5 +123,23 @@ export class UsersController {
       .send(res);
   };
 
+  public forgotPassword = async (req: Request, res: Response): Promise<void> => {
+    // const userRepository = getManager().getCustomRepository(UsersRepo);
+    let response;
+    try {
+      // console.log(req.query);
+      const params: any = req.body;
+      response = await this.usersService.forgotPassword(params);
+      // console.log(response);
+    } catch (err) {
+      throw new createHttpError.InternalServerError(err);
+    }
+    return this.responseParser
+      .setHttpCode(constant.HTTP_STATUS_OK)
+      .setBody(response)
+      .setMessage(i18n.__('SUCCESS'))
+      .send(res);
+  };
+
 
 }

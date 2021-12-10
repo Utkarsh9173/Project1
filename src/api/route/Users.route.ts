@@ -20,6 +20,7 @@ class UsersRoute {
     this.router.get('/verify-account', this.usersController.verifyAccount);
     this.router.get('/find-employee', this.usersController.findEmployee);
     this.router.post('/login', this.usersController.loginAccount);
+    this.router.post('/forgotPassword', this.usersController.forgotPassword);
   }
 }
 
