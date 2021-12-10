@@ -207,7 +207,7 @@ export class UsersService {
     const userRepository = getManager().getCustomRepository(UsersRepo);
     let response;
     try {
-      const activeUser = await userRepository.forgotPassword(
+      const activeUser = await userRepository.findActiveUserByEmailId(
         user.email
       );
       //  console.log(activeUser);
@@ -215,14 +215,12 @@ export class UsersService {
         response = 'Please register or verify your account';
       } else {
         
-        if (user.password === "") {
-          response = 'please enter password';
-        } else {
+       
           user.password = await bcrypt.hashSync(user.password);
           console.log(user.password);
           
           response = 'Password reset sucessfully';
-        }
+        
       }
       // console.log(savedUser);
       return response;
