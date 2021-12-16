@@ -12,3 +12,4 @@ certs/**/*
 package-lock.json
 
 .env
+debug.log

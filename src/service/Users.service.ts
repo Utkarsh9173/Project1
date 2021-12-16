@@ -214,13 +214,13 @@ export class UsersService {
       if (activeUser === undefined) {
         response = 'Please register or verify your account';
       } else {
-        
-       
+
+
           user.password = await bcrypt.hashSync(user.password);
           console.log(user.password);
-          
+
           response = 'Password reset sucessfully';
-        
+
       }
       // console.log(savedUser);
       return response;
