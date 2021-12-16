@@ -10,6 +10,6 @@ certs/**/*
 *.orig.*
 
 package-lock.json
+debug.log
 
 .env
-debug.log
