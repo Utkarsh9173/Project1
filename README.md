@@ -9,3 +9,7 @@
 - Run migration for the first time: `npm run typeorm migration:run`
 
 <!-- delete dist > build > generate > build > run migration-->
+
+
+<!-- Generate .env file from AWS Parameter Store -->
+`aws ssm get-parameters-by-path --path "/sg-jobportal" --query "Parameters[*].[Value]" --output text > .env`
