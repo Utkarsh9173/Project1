@@ -28,6 +28,7 @@ export class UsersController {
       } else {
         throw new createHttpError.InternalServerError(err);
       }
+
     }
     return this.responseParser
       .setHttpCode(constant.HTTP_STATUS_OK)
